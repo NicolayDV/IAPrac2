@@ -149,6 +149,55 @@ public class Jugador implements Cloneable{
 
 		return nodo_a_devolver;
 	}
+	
+	
+	
+	
+	public Tablero podaAlfaBeta(Tablero nodo, int nivel, int alfa, int beta) {
+		//Ficha result = null;
+		Tablero nodo_a_devolver = null, F = null, aux = null;
+		int valor_a_devolver = 0;
+		int masInfinito = 2147483647;
+		int menosInfinito = -2147483648;
+		
+		if (nodo.hasWinner()) {
+			nodo_a_devolver = new Tablero(null, null);
+			if (nivel % 2 == 1) nodo_a_devolver.setMinimaxValue(masInfinito);
+			else nodo_a_devolver.setMinimaxValue(menosInfinito);
+			return nodo_a_devolver;
+		} else if (nivel == MAX_MINIMAX) {
+			nodo_a_devolver = new Tablero(null, null);
+			nodo_a_devolver.setMinimaxValue(this.getHeuristic(nodo));
+			return nodo_a_devolver;
+		} else {
+		
+			nodo_a_devolver = new Tablero(null, null);
+			
+			if (nivel % 2 == 1) valor_a_devolver = menosInfinito;
+			else valor_a_devolver = masInfinito;
+			
+			nodo.setSuccessors();
+			while (!nodo.getSuccessorsMinimax().isEmpty()) {
+				F = nodo.getSuccessorsMinimax().remove(0);
+				aux = minimax(F, nivel+1);
+				
+				if (nivel % 2 == 1) {					
+					if (aux.getMinimaxValue() > valor_a_devolver) {
+						valor_a_devolver = aux.getMinimaxValue();
+						nodo_a_devolver = F;
+					}				
+				} else {
+					if (aux.getMinimaxValue() < valor_a_devolver) {
+						valor_a_devolver = aux.getMinimaxValue();
+						nodo_a_devolver = F;
+					}
+				}
+			}		
+		}
+
+		return nodo_a_devolver;
+	}
+	
 
 
 	@Override
