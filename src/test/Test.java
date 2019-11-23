@@ -18,20 +18,21 @@ public class Test {
 		Tablero tablero = new Tablero(jugador1, jugador2);	
 		Tablero tableroActual = null;
 		
+		long start = 0;
+		
 		
 		
 		while (true) {
 			
 			System.out.println("\n\n\n\n\n\n\nTorn: " + tablero.getTornActual() + "\n");
-			System.out.println(tablero);
-			
+			System.out.println(tablero);			
 			
 			
 			if (!tablero.getTornActual().isMaquina()) {
 				System.out.println("\n[" + tablero.getTornActual() + "] Decideix fitxa:");
 				int option = Integer.parseInt(scanner.nextLine());
 				if (tablero.getTornActual().getPossibleFicha(option).canBeBothSides(tablero.getLado1(), tablero.getLado2())) {
-					System.out.println("CanBeBothSides: " + tablero.getTornActual().getPossibleFicha(option).canBeBothSides(tablero.getLado1(), tablero.getLado2()));
+					//System.out.println("CanBeBothSides: " + tablero.getTornActual().getPossibleFicha(option).canBeBothSides(tablero.getLado1(), tablero.getLado2()));
 					System.out.println("\n[" + tablero.getTornActual() + "] Quin costat? [0 = esquerra, 1 = dreta]:");
 					int costat = Integer.parseInt(scanner.nextLine());
 					tablero.addFicha(tablero.getTornActual().getPossibleFicha(option), costat);
@@ -39,14 +40,15 @@ public class Test {
 			} else {
 				System.out.print("\n[" + tablero.getTornActual() + "] Decidint fitxa... ");
 				//tableroActual = tablero.getTornActual().podaAlfaBeta(tablero, 1, -2147483648, 2147483647);
+				start = System.currentTimeMillis();
 				tableroActual = tablero.getTornActual().minimax(tablero, 1);
 				System.out.println(tableroActual.getLastMove());
+				System.out.println("Ha trigat en prendre la decisió: " + (System.currentTimeMillis()-start) + " ms");
 				tablero.addFicha(tableroActual.getLastMove(), tableroActual.getLastSide());
 			}
 			
 			
-			tablero.swapPlayer();
-			
+			tablero.swapPlayer();			
 			
 			
 			if ((tablero.getTornActual().getPossiblesTiradas().isEmpty()) && (!tablero.getTornActual().getFichasJugador().isEmpty())) {
@@ -57,8 +59,7 @@ public class Test {
 				}
 			}
 			
-			if (tablero.hasWinner()) break;
-			
+			if (tablero.hasWinner()) break;			
 			
 		}
 		

@@ -11,7 +11,7 @@ public class Jugador implements Cloneable{
 	List<Ficha> possiblesTiradas;
 	boolean maquina;
 	
-	private static int MAX_MINIMAX = 2;
+	private static int MAX_MINIMAX = 8;
 	
 	
 	
@@ -101,7 +101,7 @@ public class Jugador implements Cloneable{
 	
 	public int getHeuristic(Tablero tablero) {
 		Ficha ficha = tablero.getLastMove();
-		System.out.println(ficha + " + " + ((ficha.getNum1()+1) * (ficha.getNum2()+1)));
+		//System.out.println(ficha + " + " + ((ficha.getNum1()+1) * (ficha.getNum2()+1)));
 		return (ficha.getNum1()+1) * (ficha.getNum2()+1);
 		
 		
