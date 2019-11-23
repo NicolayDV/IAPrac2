@@ -3,7 +3,7 @@ package test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tablero implements Cloneable  {
+public class Tablero implements Cloneable {
 
 	private List<Ficha> fichasTablero;
 	private int lado1, lado2;

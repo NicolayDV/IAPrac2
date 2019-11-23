@@ -9,10 +9,7 @@ public class Jugador implements Cloneable{
 	String nom;
 	List<Ficha> fichasJugador;
 	List<Ficha> possiblesTiradas;
-	boolean maquina;
-	
-	private static int MAX_MINIMAX = 8;
-	
+	boolean maquina;	
 	
 	
 	public Jugador(String nom, boolean maquina) {
@@ -99,44 +96,47 @@ public class Jugador implements Cloneable{
 	}
 	
 	
-	public int getHeuristic(Tablero tablero) {
-		Ficha ficha = tablero.getLastMove();
-		//System.out.println(ficha + " + " + ((ficha.getNum1()+1) * (ficha.getNum2()+1)));
-		return (ficha.getNum1()+1) * (ficha.getNum2()+1);
-		
-		
-		
-//		Hashtable<Integer,Integer> countFichas = new Hashtable<Integer,Integer>();
-//		for (int i=0; i<7; i++) countFichas.put(i, 0);
-//		for (Ficha ficha : tablero.getFichasTablero()) {
-//			countFichas.put(ficha.getNum1(), countFichas.get(ficha.getNum1())+1);
-//			countFichas.put(ficha.getNum2(), countFichas.get(ficha.getNum2())+1);
-//		}
-//		for (Ficha ficha : tablero.getTornActual().getFichasJugador()) {
-//			countFichas.put(ficha.getNum1(), countFichas.get(ficha.getNum1())+1);
-//			countFichas.put(ficha.getNum2(), countFichas.get(ficha.getNum2())+1);
-//		}		
-//		System.out.println(countFichas + " + " + tablero.getLastMove() + " + " + tablero.getTornActual() + " + " + (countFichas.get(tablero.getLado1()) * countFichas.get(tablero.getLado2())));
-//		return countFichas.get(tablero.getLado1()) * countFichas.get(tablero.getLado2());
-		
-		
-//		Hashtable<Integer,Integer> countFichas = new Hashtable<Integer,Integer>();
-//		for (int i=0; i<7; i++) countFichas.put(i, 0);
-//		for (Ficha ficha : tablero.getTornActual().getFichasJugador()) {
-//			countFichas.put(ficha.getNum1(), countFichas.get(ficha.getNum1())+1);
-//			countFichas.put(ficha.getNum2(), countFichas.get(ficha.getNum2())+1);
-//		}
-//		countFichas.put(tablero.getLastMove().getNum1(), countFichas.get(tablero.getLastMove().getNum1())+1);
-//		countFichas.put(tablero.getLastMove().getNum2(), countFichas.get(tablero.getLastMove().getNum2())+1);
-//		System.out.println(countFichas + " + " + (countFichas.get(tablero.getLastMove().getNum1()) + countFichas.get(tablero.getLastMove().getNum2())) + " + " + tablero.getLastMove());
-//		return countFichas.get(tablero.getLastMove().getNum1()) + countFichas.get(tablero.getLastMove().getNum2());
-		
-		
-		
+	public int getHeuristic(Tablero tablero, String heuristic) {
+				
+		if (heuristic.equals("H1")) {
+			
+			Ficha ficha = tablero.getLastMove();
+			//System.out.println("\nH1" + "Fitxa a jugar: " + ficha + " , " + "Valor de la heurística: " + ((ficha.getNum1()+1) * (ficha.getNum2()+1)));
+			return (ficha.getNum1()+1) * (ficha.getNum2()+1);
+			
+		} else if (heuristic.equals("H2")) {
+			
+			Hashtable<Integer,Integer> countFichas = new Hashtable<Integer,Integer>();
+			for (int i=0; i<7; i++) countFichas.put(i, 0);
+			for (Ficha ficha : tablero.getTornActual().getFichasJugador()) {
+				countFichas.put(ficha.getNum1(), countFichas.get(ficha.getNum1())+1);
+				countFichas.put(ficha.getNum2(), countFichas.get(ficha.getNum2())+1);
+			}
+			countFichas.put(tablero.getLastMove().getNum1(), countFichas.get(tablero.getLastMove().getNum1())+1);
+			countFichas.put(tablero.getLastMove().getNum2(), countFichas.get(tablero.getLastMove().getNum2())+1);
+			//System.out.println("\nH2HashTable: " + countFichas + " , " + "Valor heurística: " + (countFichas.get(tablero.getLastMove().getNum1()) + countFichas.get(tablero.getLastMove().getNum2())) + " , " + "Fitxa a jugar: " + tablero.getLastMove());
+			return countFichas.get(tablero.getLastMove().getNum1()) + countFichas.get(tablero.getLastMove().getNum2());
+			
+		} else {
+			
+			Hashtable<Integer,Integer> countFichas = new Hashtable<Integer,Integer>();
+			for (int i=0; i<7; i++) countFichas.put(i, 0);
+			for (Ficha ficha : tablero.getFichasTablero()) {
+				countFichas.put(ficha.getNum1(), countFichas.get(ficha.getNum1())+1);
+				countFichas.put(ficha.getNum2(), countFichas.get(ficha.getNum2())+1);
+			}
+			for (Ficha ficha : tablero.getTornActual().getFichasJugador()) {
+				countFichas.put(ficha.getNum1(), countFichas.get(ficha.getNum1())+1);
+				countFichas.put(ficha.getNum2(), countFichas.get(ficha.getNum2())+1);
+			}		
+			//System.out.println("\nH3HashTable: " + countFichas + " , " + "Fitxa a jugar: " + tablero.getLastMove() + " , " + "Valor heurístic: " + (countFichas.get(tablero.getLado1()) * countFichas.get(tablero.getLado2())));
+			return countFichas.get(tablero.getLado1()) * countFichas.get(tablero.getLado2());
+			
+		}		
 	}
 	
 	
-	public Tablero minimax(Tablero nodo, int nivel) {
+	public Tablero minimax(Tablero nodo, int nivel, String heuristic) {
 		//Ficha result = null;
 		Tablero nodo_a_devolver = null, F = null, aux = null;
 		int valor_a_devolver = 0;
@@ -149,9 +149,9 @@ public class Jugador implements Cloneable{
 //			else nodo_a_devolver.setMinimaxValue(menosInfinito);
 			nodo_a_devolver.setMinimaxValue(masInfinito);
 			return nodo_a_devolver;
-		} else if (nivel == MAX_MINIMAX) {
+		} else if (nivel == Test.MAX_MINIMAX) {
 			nodo_a_devolver = new Tablero(null, null);
-			nodo_a_devolver.setMinimaxValue(this.getHeuristic(nodo));
+			nodo_a_devolver.setMinimaxValue(this.getHeuristic(nodo, heuristic));
 			return nodo_a_devolver;
 		} else {
 			
@@ -169,7 +169,7 @@ public class Jugador implements Cloneable{
 			
 			while (!nodo.getSuccessorsMinimax().isEmpty()) {
 				F = nodo.getSuccessorsMinimax().remove(0);
-				aux = minimax(F, nivel+1);
+				aux = minimax(F, nivel+1, heuristic);
 				
 				if (nivel % 2 == 1) {					
 					if (aux.getMinimaxValue() > valor_a_devolver) {
@@ -192,55 +192,7 @@ public class Jugador implements Cloneable{
 	
 	
 	
-//	public Tablero minimax(Tablero nodo, int nivel) {
-//		//Ficha result = null;
-//		Tablero nodo_a_devolver = null, F = null, aux = null;
-//		int valor_a_devolver = 0;
-//		int masInfinito = 2147483647;
-//		int menosInfinito = -2147483648;
-//		
-//		if (nodo.hasWinner()) {
-//			nodo_a_devolver = new Tablero(null, null);
-//			if (nivel % 2 == 1) nodo_a_devolver.setMinimaxValue(masInfinito);
-//			else nodo_a_devolver.setMinimaxValue(menosInfinito);
-//			return nodo_a_devolver;
-//		} else if (nivel == MAX_MINIMAX) {
-//			nodo_a_devolver = new Tablero(null, null);
-//			nodo_a_devolver.setMinimaxValue(this.getHeuristic(nodo));
-//			return nodo_a_devolver;
-//		} else {
-//		
-//			nodo_a_devolver = new Tablero(null, null);
-//			
-//			if (nivel % 2 == 1) valor_a_devolver = menosInfinito;
-//			else valor_a_devolver = masInfinito;
-//			
-//			nodo.setSuccessors();
-//			while (!nodo.getSuccessorsMinimax().isEmpty()) {
-//				F = nodo.getSuccessorsMinimax().remove(0);
-//				aux = minimax(F, nivel+1);
-//				
-//				if (nivel % 2 == 1) {					
-//					if (aux.getMinimaxValue() > valor_a_devolver) {
-//						valor_a_devolver = aux.getMinimaxValue();
-//						nodo_a_devolver = F;
-//					}				
-//				} else {
-//					if (aux.getMinimaxValue() < valor_a_devolver) {
-//						valor_a_devolver = aux.getMinimaxValue();
-//						nodo_a_devolver = F;
-//					}
-//				}
-//			}		
-//		}
-//
-//		return nodo_a_devolver;
-//	}
-	
-	
-	
-	
-	public Tablero podaAlfaBeta (Tablero nodo, int nivel, int alfa, int beta) {
+	public Tablero podaAlfaBeta (Tablero nodo, int nivel, int alfa, int beta, String heuristic) {
 		//Ficha result = null;
 		Tablero nodo_a_devolver = null, F = null, aux = null;
 		int masInfinito = 2147483647;
@@ -251,9 +203,9 @@ public class Jugador implements Cloneable{
 //			else nodo_a_devolver.setMinimaxValue(menosInfinito);
 			nodo_a_devolver.setMinimaxValue(masInfinito);
 			return nodo_a_devolver;
-		} else if (nivel == MAX_MINIMAX) {
+		} else if (nivel == Test.MAX_ALPHABETA) {
 			nodo_a_devolver = new Tablero(null, null);
-			nodo_a_devolver.setMinimaxValue(this.getHeuristic(nodo));
+			nodo_a_devolver.setMinimaxValue(this.getHeuristic(nodo, heuristic));
 			return nodo_a_devolver;
 		} else {	
 			
@@ -268,7 +220,7 @@ public class Jugador implements Cloneable{
 			
 			while ((!nodo.getSuccessorsMinimax().isEmpty()) && (alfa<beta)) {
 				F = nodo.getSuccessorsMinimax().remove(0);
-				aux = podaAlfaBeta(F, nivel+1, alfa, beta);
+				aux = podaAlfaBeta(F, nivel+1, alfa, beta, heuristic);
 				
 				if (nivel % 2 == 1) {					
 					if (aux.getMinimaxValue() > alfa) {
