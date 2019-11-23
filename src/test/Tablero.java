@@ -3,7 +3,7 @@ package test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tablero /*implements Cloneable*/  {
+public class Tablero implements Cloneable  {
 
 	private List<Ficha> fichasTablero;
 	private int lado1, lado2;
@@ -218,7 +218,7 @@ public class Tablero /*implements Cloneable*/  {
 	
 	
 	public String whoIsWinner() {
-		String retorn = "";
+		String retorn = "\n";
 		
 		if (this.jugador1.getFichasJugador().isEmpty()) retorn = retorn + "WINNER: " + this.jugador1;
 		else if (this.jugador2.getFichasJugador().isEmpty()) retorn = retorn + "WINNER: " + this.jugador2;
@@ -234,11 +234,7 @@ public class Tablero /*implements Cloneable*/  {
 	}
 	
 	
-//	public Jugador personWinner() {
-//		Jugador jugadorRetorn = null;
-//		
-//		if (this.jugador1.getFichasJugador().isEmpty()) jugadorRetorn = this.jugador1;
-//	}
+
 
 
 	@Override

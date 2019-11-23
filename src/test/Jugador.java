@@ -10,7 +10,7 @@ public class Jugador implements Cloneable{
 	List<Ficha> possiblesTiradas;
 	boolean maquina;
 	
-	private static int MAX_MINIMAX = 6;
+	private static int MAX_MINIMAX = 9;
 	
 	
 	
@@ -114,21 +114,28 @@ public class Jugador implements Cloneable{
 		
 		if (nodo.hasWinner()) {
 			nodo_a_devolver = new Tablero(null, null);
-			if (nivel % 2 == 1) nodo_a_devolver.setMinimaxValue(masInfinito);
-			else nodo_a_devolver.setMinimaxValue(menosInfinito);
+//			if (nivel % 2 == 1) nodo_a_devolver.setMinimaxValue(masInfinito);
+//			else nodo_a_devolver.setMinimaxValue(menosInfinito);
+			nodo_a_devolver.setMinimaxValue(masInfinito);
 			return nodo_a_devolver;
 		} else if (nivel == MAX_MINIMAX) {
 			nodo_a_devolver = new Tablero(null, null);
 			nodo_a_devolver.setMinimaxValue(this.getHeuristic(nodo));
 			return nodo_a_devolver;
 		} else {
-		
-			nodo_a_devolver = new Tablero(null, null);
 			
 			if (nivel % 2 == 1) valor_a_devolver = menosInfinito;
-			else valor_a_devolver = masInfinito;
+			else valor_a_devolver = masInfinito;			
 			
 			nodo.setSuccessors();
+			
+			if (nodo.getSuccessorsMinimax().isEmpty()) {
+				try {
+					nodo_a_devolver = (Tablero) nodo.clone();
+				} catch(CloneNotSupportedException c){}
+			}
+			else nodo_a_devolver = nodo.getSuccessorsMinimax().get(0);
+			
 			while (!nodo.getSuccessorsMinimax().isEmpty()) {
 				F = nodo.getSuccessorsMinimax().remove(0);
 				aux = minimax(F, nivel+1);
@@ -144,7 +151,8 @@ public class Jugador implements Cloneable{
 						nodo_a_devolver = F;
 					}
 				}
-			}		
+			}
+			nodo_a_devolver.setMinimaxValue(valor_a_devolver);
 		}
 
 		return nodo_a_devolver;
@@ -153,46 +161,101 @@ public class Jugador implements Cloneable{
 	
 	
 	
-	public Tablero podaAlfaBeta(Tablero nodo, int nivel, int alfa, int beta) {
+//	public Tablero minimax(Tablero nodo, int nivel) {
+//		//Ficha result = null;
+//		Tablero nodo_a_devolver = null, F = null, aux = null;
+//		int valor_a_devolver = 0;
+//		int masInfinito = 2147483647;
+//		int menosInfinito = -2147483648;
+//		
+//		if (nodo.hasWinner()) {
+//			nodo_a_devolver = new Tablero(null, null);
+//			if (nivel % 2 == 1) nodo_a_devolver.setMinimaxValue(masInfinito);
+//			else nodo_a_devolver.setMinimaxValue(menosInfinito);
+//			return nodo_a_devolver;
+//		} else if (nivel == MAX_MINIMAX) {
+//			nodo_a_devolver = new Tablero(null, null);
+//			nodo_a_devolver.setMinimaxValue(this.getHeuristic(nodo));
+//			return nodo_a_devolver;
+//		} else {
+//		
+//			nodo_a_devolver = new Tablero(null, null);
+//			
+//			if (nivel % 2 == 1) valor_a_devolver = menosInfinito;
+//			else valor_a_devolver = masInfinito;
+//			
+//			nodo.setSuccessors();
+//			while (!nodo.getSuccessorsMinimax().isEmpty()) {
+//				F = nodo.getSuccessorsMinimax().remove(0);
+//				aux = minimax(F, nivel+1);
+//				
+//				if (nivel % 2 == 1) {					
+//					if (aux.getMinimaxValue() > valor_a_devolver) {
+//						valor_a_devolver = aux.getMinimaxValue();
+//						nodo_a_devolver = F;
+//					}				
+//				} else {
+//					if (aux.getMinimaxValue() < valor_a_devolver) {
+//						valor_a_devolver = aux.getMinimaxValue();
+//						nodo_a_devolver = F;
+//					}
+//				}
+//			}		
+//		}
+//
+//		return nodo_a_devolver;
+//	}
+	
+	
+	
+	
+	public Tablero podaAlfaBeta (Tablero nodo, int nivel, int alfa, int beta) {
 		//Ficha result = null;
 		Tablero nodo_a_devolver = null, F = null, aux = null;
-		int valor_a_devolver = 0;
 		int masInfinito = 2147483647;
-		int menosInfinito = -2147483648;
 		
 		if (nodo.hasWinner()) {
 			nodo_a_devolver = new Tablero(null, null);
-			if (nivel % 2 == 1) nodo_a_devolver.setMinimaxValue(masInfinito);
-			else nodo_a_devolver.setMinimaxValue(menosInfinito);
+//			if (nivel % 2 == 1) nodo_a_devolver.setMinimaxValue(masInfinito);
+//			else nodo_a_devolver.setMinimaxValue(menosInfinito);
+			nodo_a_devolver.setMinimaxValue(masInfinito);
 			return nodo_a_devolver;
 		} else if (nivel == MAX_MINIMAX) {
 			nodo_a_devolver = new Tablero(null, null);
 			nodo_a_devolver.setMinimaxValue(this.getHeuristic(nodo));
 			return nodo_a_devolver;
-		} else {
-		
-			nodo_a_devolver = new Tablero(null, null);
-			
-			if (nivel % 2 == 1) valor_a_devolver = menosInfinito;
-			else valor_a_devolver = masInfinito;
+		} else {	
 			
 			nodo.setSuccessors();
-			while (!nodo.getSuccessorsMinimax().isEmpty()) {
+			
+			if (nodo.getSuccessorsMinimax().isEmpty()) {
+				try {
+					nodo_a_devolver = (Tablero) nodo.clone();
+				} catch(CloneNotSupportedException c){}
+			}
+			else nodo_a_devolver = nodo.getSuccessorsMinimax().get(0);
+			
+			while ((!nodo.getSuccessorsMinimax().isEmpty()) && (alfa<beta)) {
 				F = nodo.getSuccessorsMinimax().remove(0);
-				aux = minimax(F, nivel+1);
+				aux = podaAlfaBeta(F, nivel+1, alfa, beta);
 				
 				if (nivel % 2 == 1) {					
-					if (aux.getMinimaxValue() > valor_a_devolver) {
-						valor_a_devolver = aux.getMinimaxValue();
+					if (aux.getMinimaxValue() > alfa) {
+						alfa = aux.getMinimaxValue();
 						nodo_a_devolver = F;
 					}				
 				} else {
-					if (aux.getMinimaxValue() < valor_a_devolver) {
-						valor_a_devolver = aux.getMinimaxValue();
+					if (aux.getMinimaxValue() < beta) {
+						beta = aux.getMinimaxValue();
 						nodo_a_devolver = F;
 					}
 				}
-			}		
+			}
+			
+			if (nivel % 2 == 1) {
+				nodo_a_devolver.setMinimaxValue(alfa);
+			} else nodo_a_devolver.setMinimaxValue(beta);
+			
 		}
 
 		return nodo_a_devolver;

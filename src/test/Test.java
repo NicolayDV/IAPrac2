@@ -38,7 +38,7 @@ public class Test {
 				} else tablero.addFicha(tablero.getTornActual().getPossibleFicha(option));
 			} else {
 				System.out.print("\n[" + tablero.getTornActual() + "] Decidint fitxa... ");
-				tableroActual = tablero.getTornActual().minimax(tablero, 1);
+				tableroActual = tablero.getTornActual().podaAlfaBeta(tablero, 1, -2147483648, 2147483647);
 				System.out.println(tableroActual.getLastMove());
 				tablero.addFicha(tableroActual.getLastMove(), tableroActual.getLastSide());
 			}
