@@ -1,6 +1,7 @@
 package test;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 public class Jugador implements Cloneable{
@@ -10,7 +11,7 @@ public class Jugador implements Cloneable{
 	List<Ficha> possiblesTiradas;
 	boolean maquina;
 	
-	private static int MAX_MINIMAX = 9;
+	private static int MAX_MINIMAX = 2;
 	
 	
 	
@@ -100,8 +101,38 @@ public class Jugador implements Cloneable{
 	
 	public int getHeuristic(Tablero tablero) {
 		Ficha ficha = tablero.getLastMove();
-		//return ficha.getNum1()>ficha.getNum2() ? ficha.getNum1() : ficha.getNum2();
-		return ficha.getNum1() + ficha.getNum2();
+		System.out.println(ficha + " + " + ((ficha.getNum1()+1) * (ficha.getNum2()+1)));
+		return (ficha.getNum1()+1) * (ficha.getNum2()+1);
+		
+		
+		
+//		Hashtable<Integer,Integer> countFichas = new Hashtable<Integer,Integer>();
+//		for (int i=0; i<7; i++) countFichas.put(i, 0);
+//		for (Ficha ficha : tablero.getFichasTablero()) {
+//			countFichas.put(ficha.getNum1(), countFichas.get(ficha.getNum1())+1);
+//			countFichas.put(ficha.getNum2(), countFichas.get(ficha.getNum2())+1);
+//		}
+//		for (Ficha ficha : tablero.getTornActual().getFichasJugador()) {
+//			countFichas.put(ficha.getNum1(), countFichas.get(ficha.getNum1())+1);
+//			countFichas.put(ficha.getNum2(), countFichas.get(ficha.getNum2())+1);
+//		}		
+//		System.out.println(countFichas + " + " + tablero.getLastMove() + " + " + tablero.getTornActual() + " + " + (countFichas.get(tablero.getLado1()) * countFichas.get(tablero.getLado2())));
+//		return countFichas.get(tablero.getLado1()) * countFichas.get(tablero.getLado2());
+		
+		
+//		Hashtable<Integer,Integer> countFichas = new Hashtable<Integer,Integer>();
+//		for (int i=0; i<7; i++) countFichas.put(i, 0);
+//		for (Ficha ficha : tablero.getTornActual().getFichasJugador()) {
+//			countFichas.put(ficha.getNum1(), countFichas.get(ficha.getNum1())+1);
+//			countFichas.put(ficha.getNum2(), countFichas.get(ficha.getNum2())+1);
+//		}
+//		countFichas.put(tablero.getLastMove().getNum1(), countFichas.get(tablero.getLastMove().getNum1())+1);
+//		countFichas.put(tablero.getLastMove().getNum2(), countFichas.get(tablero.getLastMove().getNum2())+1);
+//		System.out.println(countFichas + " + " + (countFichas.get(tablero.getLastMove().getNum1()) + countFichas.get(tablero.getLastMove().getNum2())) + " + " + tablero.getLastMove());
+//		return countFichas.get(tablero.getLastMove().getNum1()) + countFichas.get(tablero.getLastMove().getNum2());
+		
+		
+		
 	}
 	
 	

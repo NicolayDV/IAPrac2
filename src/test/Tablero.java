@@ -286,7 +286,7 @@ public class Tablero implements Cloneable  {
 			cloned.setLastMove(lastMove);
 		} else cloned.setLastMove(null);		
 		
-		if (this.tornActual.equals(this.jugador1)) {
+		if (this.tornActual.equals(this.jugador2)) {
 			Jugador newJugador2 = (Jugador)this.jugador2.clone();;
 			cloned.setTornActual(newJugador2);
 		} else {
