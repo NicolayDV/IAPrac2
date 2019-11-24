@@ -2,25 +2,29 @@ package test;
 
 import java.util.Scanner;
 
+/**
+ * @author nikolay.dimitrov@estudiants.urv.cat
+ */
 public class Test {
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////// CONFIGURACIÓ //////////////////////////////////////////////
-	public static int MAX_MINIMAX = 8;
+	public static int MAX_MINIMAX = 6;
 	public static int MAX_ALPHABETA = 11;	
 	
-	public static String nomJugador1 = "Player1";
+	public static String nomJugador1 = "IA";
 	public static boolean P1maquina = true; //true(machine) or false(human)
 	public static String P1Algorithm = "minimax"; //minimax or alphabeta
-	public static String P1Heuristic = "H1"; //H1, H2 or H3
+	public static String P1Heuristic = "H3"; //H1, H2 or H3
 	
-	public static String nomJugador2 = "Player2";
-	public static boolean P2maquina = true; //true(machine) or false(human)
-	public static String P2Algorithm = "minimax"; //minimax or alphabeta
-	public static String P2Heuristic = "H1"; //H1, H2 or H3
+	public static String nomJugador2 = "Niko";
+	public static boolean P2maquina = false; //true(machine) or false(human)
+	public static String P2Algorithm = "alphabeta"; //minimax or alphabeta
+	public static String P2Heuristic = "H3"; //H1, H2 or H3
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
+
 	
 	
 	static Scanner scanner = new Scanner(System.in);
@@ -29,8 +33,8 @@ public class Test {
 		
 		DominoBox joc = new DominoBox();
 		
-		Jugador jugador1 = new Jugador("Player1", P1maquina);
-		Jugador jugador2 = new Jugador("Player2", P2maquina);
+		Jugador jugador1 = new Jugador(nomJugador1, P1maquina);
+		Jugador jugador2 = new Jugador(nomJugador2, P2maquina);
 		
 		joc.repartirFichas(jugador1, jugador2);
 		

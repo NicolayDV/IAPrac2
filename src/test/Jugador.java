@@ -4,14 +4,22 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+/**
+ * @author nikolay.dimitrov@estudiants.urv.cat
+ */
 public class Jugador implements Cloneable{
 
-	String nom;
-	List<Ficha> fichasJugador;
-	List<Ficha> possiblesTiradas;
-	boolean maquina;	
+	private String nom;
+	private List<Ficha> fichasJugador;
+	private List<Ficha> possiblesTiradas;
+	private boolean maquina;	
 	
 	
+	
+	/**
+	 * @param nom - String amb el nom del jugador
+	 * @param maquina - Boolean que indica true si el jugador és la maquina o false si és huma.
+	 */
 	public Jugador(String nom, boolean maquina) {
 		this.nom = nom;
 		this.maquina = maquina;
@@ -21,83 +29,37 @@ public class Jugador implements Cloneable{
 	
 	
 	
+	/**
+	 * Mètode per afegir una Ficha a la llista que té el jugaddor.
+	 * @param ficha - fitxa de classe Ficha que vols afegir a la mà del jugador.
+	 */
 	public void addFicha(Ficha ficha) {
 		this.fichasJugador.add(ficha);
 	}
 
 	
 	
+	/**
+	 * Comprova si la fitxa passada per paràmetre existeix a la mà del jugador.
+	 * @param ficha
+	 * @return true si existeix, false si no existeix
+	 */
 	public boolean hasFicha(Ficha ficha) {
 		return fichasJugador.contains(ficha) ? true : false;
 	}
 	
-	public List<Ficha> getFichasJugador() {
-		return fichasJugador;
-	}
-
 	
 	
-	public String getNom() {
-		return nom;
-	}
-
-	
-	public List<Ficha> getPossiblesTiradas() {
-		return possiblesTiradas;
-	}
-
-	
-	
-
-
-	public void setFichasJugador(List<Ficha> fichasJugador) {
-		this.fichasJugador = fichasJugador;
-	}
-
-
-
-	public boolean isMaquina() {
-		return maquina;
-	}
-	
-	
-	public int sumPoints() {
-		int suma = 0;
-		for (Ficha ficha : this.fichasJugador) {
-			suma = suma + ficha.getNum1() + ficha.getNum2();
-		}
-		return suma;
-	}
-
-
-
-	public void setPossiblesTiradas(List<Ficha> possiblesTiradas) {
-		List<Ficha> aux = new ArrayList<Ficha>();
-		for(Ficha ficha : possiblesTiradas) {
-			aux.add(ficha);
-		}
-		this.possiblesTiradas = aux;
-	}
-
-
-	public void setPossiblesTiradas(int num1, int num2) {
-		List<Ficha> aux = new ArrayList<Ficha>();
-		for(Ficha ficha : this.fichasJugador) {
-			if (ficha.hasInt(num1) || ficha.hasInt(num2)) {
-				aux.add(ficha);
-			}
-		}
-		this.possiblesTiradas = aux;
-	}
-	
-	
-	public Ficha getPossibleFicha(int id) {
-		return this.possiblesTiradas.get(id);
-	}
-	
-	
+	/**
+	 * Retorna el valor heurístic del taulell passat per paràmetre.
+	 * Implementa 3 heurístiques explicades a la documentació (H1, H2, H3).
+	 * A partir del String passat per paràmetre, escull una heurística o una altra.
+	 * @param tablero - Taulell que li passes per paràmetre
+	 * @param heuristic - String que serveix per escollit la heurística: H1, H2 o H3
+	 * @return - enter amb el valor heurístic
+	 */
 	public int getHeuristic(Tablero tablero, String heuristic) {
-				
+		
 		if (heuristic.equals("H1")) {
 			
 			Ficha ficha = tablero.getLastMove();
@@ -136,8 +98,15 @@ public class Jugador implements Cloneable{
 	}
 	
 	
+	
+	/**
+	 * Algoritme de jocs Minimax recursiu que retorna la següent millor jugada.
+	 * @param nodo - Estat del taulell actual
+	 * @param nivel - Nivell d'exploració en el qual estas (comença per 1)
+	 * @param heuristic - Heurística a escollir: H1, H2 o H3
+	 * @return - Taulell amb la millor jugada
+	 */
 	public Tablero minimax(Tablero nodo, int nivel, String heuristic) {
-		//Ficha result = null;
 		Tablero nodo_a_devolver = null, F = null, aux = null;
 		int valor_a_devolver = 0;
 		int masInfinito = 2147483647;
@@ -189,11 +158,18 @@ public class Jugador implements Cloneable{
 		return nodo_a_devolver;
 	}
 	
+		
 	
-	
-	
-	public Tablero podaAlfaBeta (Tablero nodo, int nivel, int alfa, int beta, String heuristic) {
-		//Ficha result = null;
+	/**
+	 * Algoritme Minimax adaptat de manera que no explori els nodes no necessaris, i per tant és més eficient.
+	 * @param nodo - Estat del taulell actual
+	 * @param nivel - Nivell d'exploració en el qual estas (comença per 1)
+	 * @param alfa - valor per defecte de les variables utilitzades per fer la poda (al principi és menysInfinit)
+	 * @param beta - valor per defecte de les variables utilitzades per fer la poda (al principi és mesInfinit)
+	 * @param heuristic - Heurística a escollir: H1, H2 o H3
+	 * @return - Taulell amb la millor jugada
+	 */
+	public Tablero podaAlfaBeta(Tablero nodo, int nivel, int alfa, int beta, String heuristic) {
 		Tablero nodo_a_devolver = null, F = null, aux = null;
 		int masInfinito = 2147483647;
 		
@@ -244,12 +220,99 @@ public class Jugador implements Cloneable{
 		return nodo_a_devolver;
 	}
 	
+	
+	
+	/**
+	 * S'utilitza per sumar tots els puntets de les fitxes en cas de que es quedi en empat.
+	 * @return - enter amb la suma de tots els puntets.
+	 */
+	public int sumPoints() {
+		int suma = 0;
+		for (Ficha ficha : this.fichasJugador) {
+			suma = suma + ficha.getNum1() + ficha.getNum2();
+		}
+		return suma;
+	}
 
+
+
+	/**
+	 * És un setter de la llista de possibles tirades del jugador a partir d'una llista de fitxes.
+	 * @param possiblesTiradas - Llista de fitxes
+	 */
+	public void setPossiblesTiradas(List<Ficha> possiblesTiradas) {
+		List<Ficha> aux = new ArrayList<Ficha>();
+		for(Ficha ficha : possiblesTiradas) {
+			aux.add(ficha);
+		}
+		this.possiblesTiradas = aux;
+	}
+	
+
+
+	/**
+	 * És un setter de la llista de possibles tirades del jugador que ho fa a partir de dos números,
+	 * costat esquerre i costat dret del taulell. Amb aquests número mira quines fitxes de les que té a la
+	 * mà poden encaixar amb aquests números.
+	 * @param num1 - Costat esquerre del taulell
+	 * @param num2 - Costat dret del taulell
+	 */
+	public void setPossiblesTiradas(int num1, int num2) {
+		List<Ficha> aux = new ArrayList<Ficha>();
+		for(Ficha ficha : this.fichasJugador) {
+			if (ficha.hasInt(num1) || ficha.hasInt(num2)) {
+				aux.add(ficha);
+			}
+		}
+		this.possiblesTiradas = aux;
+	}
+	
+	
+	
+	/**
+	 * Retorna una fitxa a partir de la seva posició en la llista de possibles tirades del jugador.
+	 * @param id - enter que fa referència a la fitxa de la llista
+	 * @return fitxa de tipus Ficha
+	 */
+	public Ficha getPossibleFicha(int id) {
+		return this.possiblesTiradas.get(id);
+	}
+	
+	
+
+	/**
+	 * GETTERS I SETTERS
+	 */	
+	
+	public List<Ficha> getFichasJugador() {
+		return fichasJugador;
+	}	
+	
+	public String getNom() {
+		return nom;
+	}
+	
+	public List<Ficha> getPossiblesTiradas() {
+		return possiblesTiradas;
+	}
+
+	public void setFichasJugador(List<Ficha> fichasJugador) {
+		this.fichasJugador = fichasJugador;
+	}
+
+	public boolean isMaquina() {
+		return maquina;
+	}
+	
+
+	
+	
 
 	@Override
 	public String toString() {
 		return nom;
 	}
+	
 	
 	
 	@Override
@@ -269,6 +332,7 @@ public class Jugador implements Cloneable{
     }
 	
 	
+	
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		
@@ -279,7 +343,5 @@ public class Jugador implements Cloneable{
 		cloned.setFichasJugador(fichasJugadorCloned);
 		cloned.setPossiblesTiradas(possiblesTiradasCloned);
 		return cloned;
-	}
-	
-	
+	}	
 }

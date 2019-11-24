@@ -1,12 +1,20 @@
 package test;
 
-
-
+/**
+ * @author nikolay.dimitrov@estudiants.urv.cat
+ */
 public class Ficha implements Cloneable{
 	
 	private int num1, num2;
 	private boolean flipped;
 	
+	
+	
+	/**
+	 * Constructor de la classe Ficha
+	 * @param num1 - Enter que identifica un dels números d'una fitxa de dòmino
+	 * @param num2 - Enter que identifica l'altre número d'una fitxa de dòmino
+	 */
 	public Ficha(int num1, int num2) {
 		this.num1 = num1;
 		this.num2 = num2;
@@ -14,6 +22,49 @@ public class Ficha implements Cloneable{
 	}
 	
 	
+	
+	/**
+	 * Serveix per indicar si la fitxa conté a una de les dues posicions un enter passat per paràmetre.
+	 * @param x - enter a buscar
+	 * @return true si el conté, false si no el conté
+	 */
+	public boolean hasInt(int x) {
+		if ((x == this.num1) || (x == this.num2)) return true;
+		else return false;
+	}
+	
+	
+	
+	/**
+	 * Aquest mètode serveix per girar una fitxa i canviar-li la orientació.
+	 * Reverteix una variable que indica si està girada o no i intercanvia el valor de les
+	 * dues variables dels enters.
+	 */
+	public void flip() {
+		this.flipped = !this.flipped;
+		this.num1 = this.num1 + this.num2;
+		this.num2 = this.num1 - this.num2;
+		this.num1 = this.num1 - this.num2;
+	}
+	
+	
+	
+	/**
+	 * Indica si aquesta fitxa conté els números dels dos costats del taulell per
+	 * saber si pot anar als dos costats i hem de fer a l'usuari escollir el costat.
+	 * @param num1 - Costat esquerre del taulell
+	 * @param num2 - Costat dret del taulell
+	 * @return - true si la fitxa té els dos costats del taulell, false si no
+	 */
+	public boolean canBeBothSides(int num1, int num2) {
+		return this.hasInt(num1) && this.hasInt(num2);
+	}
+
+	
+	
+	/**
+	 * GETTERS I SETTERS
+	 */	
 
 	public int getNum1() {
 		return num1;
@@ -23,22 +74,8 @@ public class Ficha implements Cloneable{
 		return num2;
 	}
 
-	public boolean hasInt(int x) {
-		if ((x == this.num1) || (x == this.num2)) return true;
-		else return false;
-	}
-	
-	public void flip() {
-		this.flipped = !this.flipped;
-		this.num1 = this.num1 + this.num2;
-		this.num2 = this.num1 - this.num2;
-		this.num1 = this.num1 - this.num2;
-	}
 	
 	
-	public boolean canBeBothSides(int num1, int num2) {
-		return this.hasInt(num1) && this.hasInt(num2);
-	}
 	
 
 	@Override
@@ -46,6 +83,7 @@ public class Ficha implements Cloneable{
 		return "[" + num1 + "|" + num2 + "]";
 	}
 
+	
 	
 	@Override
     public boolean equals(Object o) { 
@@ -65,12 +103,9 @@ public class Ficha implements Cloneable{
     }
 	
 	
+	
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		
 		return super.clone();
-	}
-	
-	
-	
+	}	
 }
